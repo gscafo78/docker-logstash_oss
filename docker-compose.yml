@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:8.13.4
+    container_name: logstash
+    ports:
+      - "5044:5044"  # Default Logstash Beats input port
+      - "9600:9600"  # Default Logstash monitoring API port
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    environment:
+      - LS_JAVA_OPTS=-Xmx1g -Xms1g  # Adjust Java memory options as needed
+    networks:
+      - logstash-net
+
+networks:
+  logstash-net:
+    driver: bridge
